@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <title>track13.radio</title>
+    <style>
+        :root {
+            --neon-blue: #00ffff;
+            --warm-yellow: #ffee8a;
+            --bg-dark: #0a0a0a;
+            --text-light: #cfcfcf;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: var(--bg-dark);
+            font-family: 'Courier New', Courier, monospace;
+            color: var(--text-light);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        header h1 {
+            color: var(--neon-blue);
+            font-size: 2.5em;
+            text-shadow: 0 0 10px var(--neon-blue);
+        }
+
+        .cover {
+            width: 300px;
+            height: 300px;
+            border-radius: 10px;
+            overflow: hidden;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 0 20px rgba(0,255,255,0.2);
+        }
+
+        .cover img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .track-info {
+            font-size: 1.2em;
+            color: var(--warm-yellow);
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .play-btn {
+            font-size: 1.5em;
+            color: var(--neon-blue);
+            background: transparent;
+            border: 2px solid var(--neon-blue);
+            border-radius: 8px;
+            padding: 0.6em 2em;
+            cursor: pointer;
+            text-shadow: 0 0 5px var(--neon-blue);
+            transition: all 0.3s ease;
+        }
+
+        .play-btn:hover {
+            background-color: rgba(0, 255, 255, 0.1);
+            box-shadow: 0 0 10px rgba(0,255,255,0.5);
+        }
+
+        audio {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>track13.radio</h1>
+    </header>
+
+    <div class="cover">
+        <img id="coverImage" src="/static/covers/placeholder.jpg" alt="Album Cover">
+    </div>
+
+    <div class="track-info" id="trackInfo">
+        Lade Track...
+    </div>
+
+    <button class="play-btn" id="playPause">PLAY</button>
+
+    <audio id="announcementPlayer"></audio>
+    <audio id="audioPlayer"></audio>
+
+    <script>
+        const audio = document.getElementById("audioPlayer");
+        const announcement = document.getElementById("announcementPlayer");
+        const playPauseBtn = document.getElementById("playPause");
+        const trackInfo = document.getElementById("trackInfo");
+        const coverImage = document.getElementById("coverImage");
+
+        let currentIndex = -1;
+        let playlist = [];
+        let isPlaying = false;
+
+        async function fetchPlaylist() {
+            const response = await fetch("/playlist");
+            playlist = await response.json();
+            loadNextTrack();
+        }
+
+        function loadNextTrack() {
+            currentIndex = (currentIndex + 1) % playlist.length;
+            const track = playlist[currentIndex];
+            const filename = track.file.split("/").pop().replace(".mp3", "").toLowerCase();
+
+            audio.src = "/static/" + track.file;
+            announcement.src = "/static/ansagen_cache/" + filename + ".mp3";
+            trackInfo.textContent = `${track.artist} — ${track.title}`;
+            coverImage.src = track.cover ? "/static/" + track.cover : "/static/covers/placeholder.jpg";
+        }
+
+        announcement.addEventListener("ended", () => {
+            audio.play();
+        });
+
+        audio.addEventListener("ended", () => {
+            loadNextTrack();
+            announcement.play();
+        });
+
+        playPauseBtn.addEventListener("click", () => {
+            if (!isPlaying) {
+                isPlaying = true;
+                announcement.play();
+                playPauseBtn.textContent = "PAUSE";
+            } else {
+                isPlaying = false;
+                announcement.pause();
+                audio.pause();
+                playPauseBtn.textContent = "PLAY";
+            }
+        });
+
+        window.onload = fetchPlaylist;
+    </script>
+</body>
+</html>

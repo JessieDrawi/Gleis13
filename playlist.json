@@ -1,0 +1,56 @@
+[
+  {
+    "file": "audio/Kode9 - Hole in the Sky.mp3",
+    "title": "Hole in the Sky",
+    "artist": "Kode9",
+    "cover": "covers/Kode9 - Hole in the Sky.jpg"
+  },
+  {
+    "file": "audio/HNNY - Happy Happy House House.mp3",
+    "title": "Happy Happy House House",
+    "artist": "HNNY",
+    "cover": "covers/HNNY - Happy Happy House House.jpg"
+  },
+  {
+    "file": "audio/Batu - Whisper.mp3",
+    "title": "Whisper",
+    "artist": "Batu",
+    "cover": "covers/placeholder.jpg"
+  },
+  {
+    "file": "audio/Double Pelican Man - Sweet Genius.mp3",
+    "title": "Sweet Genius",
+    "artist": "Double Pelican Man",
+    "cover": "covers/Double Pelican Man - Sweet Genius.jpg"
+  },
+  {
+    "file": "audio/O$VMV$M - Dill Big Choo.mp3",
+    "title": "Dill Big Choo",
+    "artist": "O$VMV$M",
+    "cover": "covers/O$VMV$M - Dill Big Choo.jpg"
+  },
+  {
+    "file": "audio/Al Dobson Jr - Vibrations.mp3",
+    "title": "Vibrations",
+    "artist": "Al Dobson Jr",
+    "cover": "covers/Al Dobson Jr - Vibrations.jpg"
+  },
+  {
+    "file": "audio/Karizma - Kellah.mp3",
+    "title": "Kellah",
+    "artist": "Karizma",
+    "cover": "covers/Karizma - Kellah.jpg"
+  },
+  {
+    "file": "audio/Roza Terenzi - Up in Smoke (Mixed).mp3",
+    "title": "Up in Smoke (Mixed)",
+    "artist": "Roza Terenzi",
+    "cover": "covers/Roza Terenzi - Up in Smoke (Mixed).jpg"
+  },
+  {
+    "file": "audio/Auntie Flo - Lights in the Northern Sky.mp3",
+    "title": "Lights in the Northern Sky",
+    "artist": "Auntie Flo",
+    "cover": "covers/Auntie Flo - Lights in the Northern Sky.jpg"
+  }
+]

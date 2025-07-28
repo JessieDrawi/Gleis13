@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <title>track13_radio</title>
+  <style>
+    body {
+      background-color: #111;
+      color: #f5f5f5;
+      font-family: sans-serif;
+      text-align: center;
+      margin: 0;
+      padding: 2em;
+    }
+    .title {
+      font-size: 1.5em;
+      margin-bottom: 1em;
+    }
+    button {
+      background: none;
+      border: 2px solid #f5f5f5;
+      color: #f5f5f5;
+      font-size: 1.2em;
+      padding: 0.5em 1em;
+      cursor: pointer;
+      margin-top: 2em;
+    }
+    button:hover {
+      background-color: #f5f5f5;
+      color: #111;
+    }
+    .hidden {
+      display: none;
+    }
+  </style>
+</head>
+<body>
+  <div class="title" id="now-playing">Lade Track...</div>
+  <button id="playPauseBtn">▶ Play</button>
+
+  <audio id="bahnAudio" class="hidden"></audio>
+  <audio id="trackAudio" class="hidden"></audio>
+
+  <script>
+    let playlist = [];
+    let currentIndex = 0;
+    let isPlaying = false;
+
+    const bahnAudio = document.getElementById("bahnAudio");
+    const trackAudio = document.getElementById("trackAudio");
+    const nowPlaying = document.getElementById("now-playing");
+    const playPauseBtn = document.getElementById("playPauseBtn");
+
+    async function loadPlaylist() {
+      const res = await fetch("/playlist");
+      playlist = await res.json();
+      loadCurrent();
+    }
+
+    function loadCurrent() {
+      const track = playlist[currentIndex];
+      nowPlaying.textContent = `${track.title} – ${track.artist}`;
+      bahnAudio.src = `/generate_for_song_cached?title=${encodeURIComponent(track.title)}&artist=${encodeURIComponent(track.artist)}`;
+      trackAudio.src = track.file;
+    }
+
+    function playAll() {
+      isPlaying = true;
+      playPauseBtn.textContent = "⏸ Pause";
+      bahnAudio.play();
+    }
+
+    function pauseAll() {
+      isPlaying = false;
+      playPauseBtn.textContent = "▶ Play";
+      bahnAudio.pause();
+      trackAudio.pause();
+    }
+
+    playPauseBtn.addEventListener("click", () => {
+      if (isPlaying) {
+        pauseAll();
+      } else {
+        playAll();
+      }
+    });
+
+    bahnAudio.addEventListener("ended", () => {
+      trackAudio.play();
+    });
+
+    trackAudio.addEventListener("ended", () => {
+      currentIndex = (currentIndex + 1) % playlist.length;
+      loadCurrent();
+      if (isPlaying) playAll();
+    });
+
+    loadPlaylist();
+  </script>
+</body>
+</html>
